@@ -3,6 +3,8 @@ package serpapi
 import (
 	"context"
 	"encoding/json"
+	"flights-master/logger"
+	"time"
 
 	g "github.com/serpapi/google-search-results-golang"
 )
@@ -35,18 +37,25 @@ type SearchResponse struct {
 	BestFlights []FlightInfo `json:"best_flights"`
 }
 
-func (s *serpapi) SearchFlights(ctx context.Context) (SearchResponse, error) {
+func (s *serpapi) SearchFlights(ctx context.Context, to, from, date string) (SearchResponse, error) {
+	d, err := time.Parse("2006-01-02", date)
+	if err != nil {
+		return SearchResponse{}, err
+	}
+
 	response := SearchResponse{}
 	parameter := map[string]string{
 		"engine":        "google_flights",
-		"departure_id":  "CDG",
-		"arrival_id":    "AUS",
+		"departure_id":  from,
+		"arrival_id":    to,
 		"hl":            "en",
 		"gl":            "us",
 		"currency":      "USD",
-		"outbound_date": "2025-03-03",
-		"return_date":   "2025-03-09",
+		"outbound_date": date,
+		"return_date":   d.AddDate(0, 0, 5).Format("2006-01-02"),
 	}
+
+	logger.FromContext(ctx).WithAny("flights_parameters", parameter).Info("about to fetch flights")
 
 	search := g.NewGoogleSearch(parameter, s.apiKey)
 	results, err := search.GetJSON()

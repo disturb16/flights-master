@@ -1,11 +1,11 @@
 package httpapi
 
 import (
-	"flights-master/internal/httpapi/fligts"
+	"flights-master/internal/httpapi/travel"
 
 	"go.uber.org/fx"
 )
 
 var Module = fx.Module("httpapi", fx.Provide(
-	fligts.New,
+	travel.New,
 ))
