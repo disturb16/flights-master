@@ -40,7 +40,7 @@ func New(fs serpapi.Finder) Manager {
 func (f *travelManager) GetBestFlights(ctx context.Context, to, from, date string) ([]models.Flight, error) {
 	log := logger.FromContext(ctx)
 
-	response, err := f.s.SearchFlights(ctx, to, from, date)
+	response, err := f.s.FindFlights(ctx, to, from, date)
 	if err != nil {
 		log.WithError(err).Error("failed to get flights")
 		return nil, err
@@ -75,7 +75,7 @@ func (f *travelManager) GetBestFlights(ctx context.Context, to, from, date strin
 func (tm *travelManager) GetBestHotels(ctx context.Context, destination, date string) ([]models.Hotel, error) {
 	log := logger.FromContext(ctx)
 
-	response, err := tm.s.SearchHotels(ctx, destination, date)
+	response, err := tm.s.FindHotels(ctx, destination, date)
 	if err != nil {
 		log.WithError(err).Error("failed to get flights")
 		return nil, nil

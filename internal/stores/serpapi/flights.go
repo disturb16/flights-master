@@ -37,7 +37,7 @@ type SearchResponse struct {
 	BestFlights []FlightInfo `json:"best_flights"`
 }
 
-func (s *serpapi) SearchFlights(ctx context.Context, to, from, date string) (SearchResponse, error) {
+func (s *serpapi) FindFlights(ctx context.Context, to, from, date string) (SearchResponse, error) {
 	d, err := time.Parse("2006-01-02", date)
 	if err != nil {
 		return SearchResponse{}, err
@@ -52,7 +52,7 @@ func (s *serpapi) SearchFlights(ctx context.Context, to, from, date string) (Sea
 		"gl":            "us",
 		"currency":      "USD",
 		"outbound_date": date,
-		"return_date":   d.AddDate(0, 0, 5).Format("2006-01-02"),
+		"return_date":   d.AddDate(0, 0, reservationDaysAmount).Format("2006-01-02"),
 	}
 
 	logger.FromContext(ctx).WithAny("flights_parameters", parameter).Info("about to fetch flights")

@@ -47,5 +47,6 @@ func New(s *settings.Settings) *Logger {
 }
 
 func FromContext(ctx context.Context) *Logger {
+	// TODO: get default attributes from context
 	return defaultLogger
 }
